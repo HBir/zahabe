@@ -1,5 +1,6 @@
 <?php
 	header('Content-Type: text/html; charset=utf-8');
+	include 'functions.php';
 	$ID = $_POST['ID'];
 	$password = $_POST['password'];
 ?>
@@ -33,12 +34,9 @@
 			try
 				{
 				$db = new PDO('sqlite:zahabe.db');
-				$stmt2 = $db->prepare('SELECT * FROM MinnsDu 
-									LEFT JOIN Stories ON MinnsDu.ID=Stories.MVID 
-									WHERE ID = (SELECT ID FROM MinnsDu ORDER BY ID asc LIMIT 1 OFFSET :id-1)');
-				$stmt2->bindParam(':id', $ID);
-				$stmt2->execute();
-				$row2 = $stmt2->fetch();
+
+				$row2 = getMVByNumber($db, $ID);
+
 				$MVID = $row2['ID'];
 				if (empty($MVID)){
 					print '...gick vilse?';
@@ -57,7 +55,7 @@
 					break;
 				}
 			?>
-			<form action="edit2.php?id=<?php echo $MVID; ?>" method="post" accept-charset="utf-8" autocomplete="off">
+			<form action="editAction.php?id=<?php echo $MVID; ?>" method="post" accept-charset="utf-8" autocomplete="off">
 				<div id="formbox">
 					<input type="text" name="Text" id="editruta" placeholder="Ny" value="<?php echo $row2['Text']?>" required>
 					<textarea name="story" id="storyedit"><?php echo $row2['Story'];?></textarea><br>

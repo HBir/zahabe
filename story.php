@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <?php
+	include 'functions.php';
 	header('Content-Type: text/html; charset=utf-8');
 	$ID = $_GET["id"];
 	$db = new PDO('sqlite:zahabe.db');
@@ -56,17 +57,7 @@
 				<a href="remove.php?id=<?php echo $row['cnt'];?>" title="Edit"><img src="assets/edit.png" alt="edit"></a>
 			</div>
 			<?php 
-					function nl2p($string)
-					/*Gör om radbrytning i sträng till ny paragraf*/
-					{
-						$paragraphs = '';
-						foreach (explode("\n", $string) as $line) {
-							if (trim($line)) {
-								$paragraphs .= '<p>' . $line . '</p>';
-							}
-						}
-						return $paragraphs;
-					}
+					
 					$titel = str_replace("Minns vi den gången Zahabe ","...", $row['Text']);
 
 					echo "<h2>".$titel."</h2>";

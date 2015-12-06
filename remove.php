@@ -33,7 +33,7 @@
 				<form method="post" accept-charset="utf-8" autocomplete="off">
 				Inlägg nr: <input type="number" name="ID" value="<?php echo $_GET["id"];?>" id="removeruta" min="1" required><br>
 				Lösenord: <input type="password" name="password" id="password" required><br>
-					<input type="submit" formaction="remove2.php" class="button" value="Ta bort">
+					<input type="submit" formaction="removeAction.php" class="button" value="Ta bort">
 					<input type="submit" formaction="edit.php" class="button" value="Ändra">
 
 				</form>

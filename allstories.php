@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <?php
-	header('Content-Type: text/html; charset=utf-8');
+	include 'functions.php';
 ?>
 <html lang="en">
 	<head>
@@ -53,8 +53,7 @@
 						{
 							$db = new PDO('sqlite:zahabe.db');
 						
-							$result = $db->query('SELECT Text, ID, Story, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
-													FROM MinnsDu a INNER JOIN Stories ON a.ID = Stories.MVID ORDER BY ID desc');
+							$result = getAllStories($db);
 							foreach($result as $row)
 							{
 							  if (isset($row['Story'])) {

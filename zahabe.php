@@ -1,5 +1,8 @@
 ﻿<!DOCTYPE html>
+<?php
 
+	include 'functions.php';
+?>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
@@ -53,80 +56,36 @@
 				<b>Dagens Zahabe:</b>
 				<ol>
 				<?php
-				
-				try
-						{
-							$db = new PDO('sqlite:zahabe.db');
+				try{
+					$db = new PDO('sqlite:zahabe.db');
 							
-							$res = $db->query('SELECT COUNT (Id) as cnt FROM MinnsDu');
+					$row = getDailyMV($db);
+
+
+					if (isset($row['Story'])) {
+						print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
+						print "<a href='story.php?id=".$row['ID']."'><li value='".$row['cnt']."'><span>".$row['Text']."</span></li></a>";
+					} else {
+						print "<li value='".$row['cnt']."'>".$row['Text']."</li>";
+					}
 							
-							foreach($res as $row) {
-								$rowCnt = $row['cnt'];
-							}
-							/*****Försök på att göra en dagens icke minnes-beroende******
-							//srand(floor(time() / (60*60*24)));
-							$dailyX = rand(1, 20);
-							print "dailyX: ".$dailyX."<br>";
-							$MaxDailyY = floor($rowCnt/20);
-							print "MaxDailyY: ".$MaxDailyY."<br>";
-							$dailyY = rand(1, $MaxDailyY);
-							print "dailyY: ".$dailyY."<br>";
-
-							print "daily: ".($dailyX + (($dailyY-1)*20));
-							*/
-
-
-
-							$myfileR = fopen("daily.txt", "r") or die("Unable to open file!");
-							if (fgets($myfileR) != floor(time() / (60*60*24))) {
-								$myfileW = fopen("daily.txt", "w") or die("Unable to open file!");
-								fwrite($myfileW, floor((time() + 3600) / (60*60*24))."\n");
-								fwrite($myfileW, rand(0, $rowCnt));
-								fclose($myfileW);
-							}
-							$daily = fgets($myfileR);
-							fclose($myfileR);
-
-							$myfileR = fopen("daily.txt", "r") or die("Unable to open file!");
-							fgets($myfileR);
-							$daily = fgets($myfileR);
-							fclose($myfileR);
-
-							
-							$query = 'SELECT Text, ID, Story, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
-												FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID ORDER BY ID asc
-												LIMIT 1 OFFSET '.($daily-1);
-							$result = $db->query($query);
-							foreach($result as $row) {
-							  if (isset($row['Story'])) {
-								print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
-								print "<a href='story.php?id=".$row['ID']."'><li value='".$row['cnt']."'><span>".$row['Text']."</span></li></a>";
-							  } else {
-								print "<li value='".$row['cnt']."'>".$row['Text']."</li>";
-							  }
-							}
-							$db = NULL;
-						}
-						catch(PDOException $e)
-						{
-							print 'Exception : '.$e->getMessage();
-						}
+					}catch(PDOException $e){
+						print 'Exception : '.$e->getMessage();
+					}
 
 				?></ol>
 			</div>
 			<div id="rows">
 				<ol reversed>
 					<?php
-						try
-						{
-							$db = new PDO('sqlite:zahabe.db');
-						
-							$result = $db->query('SELECT * FROM MinnsDu LEFT JOIN Stories ON Stories.MVID = MinnsDu.ID ORDER BY ID desc');
+						try{
+							$result = getAllMVs($db);
+
 							foreach($result as $row)
 							{
 							  if (isset($row['Story'])) {
-								print "<div class='storyicon'><a href='story.php?id=".$row['MVID']."'><img src='assets/read.png' alt='read full'></a></div>";
-								print "<a href='story.php?id=".$row['MVID']."'><li><span>".$row['Text']."</span></li></a>";
+								print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
+								print "<a href='story.php?id=".$row['ID']."'><li><span>".$row['Text']."</span></li></a>";
 							  } else {
 								print "<li>".$row['Text']."</li>";
 							  }

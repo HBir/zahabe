@@ -31,55 +31,14 @@
 		<div id="wrapper">
 			<a href="zahabe.php" id="rubrik"><h1>Minns vi den gången Zahabe...</h1></a>
 			<?php
+				include 'functions.php';
 				header('Content-Type: text/html; charset=utf-8');
+
 				$ID = $_POST['ID'];
 				$password = $_POST['password'];
-				if ($ID == '1') {
-							print '...försökte rubba det fundament på vilket allt vilade?';
-							print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';
-							break;
-						}
 				
-				if ($password == "iklabbe") {
-					try
-						{
-						if (empty($ID)) {
-							print '...inte förstod?';
-							print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';
-							break;
-						}
-						$db = new PDO('sqlite:zahabe.db');
-						$result = $db->query('SELECT * FROM MinnsDu ORDER BY ID asc LIMIT 1 OFFSET ' . $ID . '-1');
-				
-				
-						$db->query('delete from MinnsDu 
-							where id = (
-							select id from (
-							select id from MinnsDu order by id limit 1 OFFSET ' . $ID . '-1) 
-							as t)');
-				
-						$i = 0;
-				
-						foreach($result as $row)
-						{
-						  print "..tog bort raden: ".$row['Text']."<br>";
-						  $i = 1;
-						}
-				
-						if ($i == 0)
-						{
-						print "Rad nummer ".$ID." existerar ej";
-						}
-				
-						$db = NULL;
-					  }
-					  catch(PDOException $e)
-					  {
-						print 'Exception : '.$e->getMessage();
-					  }
-				} else {
-					print "...glömde nycklarna hemma?";
-				}
+				$message = removeMV($password, $ID);
+				print $message;
 			?>
 			<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>
 		</div>
