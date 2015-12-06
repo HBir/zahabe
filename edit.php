@@ -31,37 +31,32 @@
 				print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';
 				break;
 			} else if ($password == "iklabbe") {
-			try
-				{
+			try{
 				$db = new PDO('sqlite:zahabe.db');
 
 				$row2 = getMVByNumber($db, $ID);
-
 				$MVID = $row2['ID'];
+
 				if (empty($MVID)){
 					print '...gick vilse?';
-					print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';
-					break;
+				} else {
+					echo '<form action="editAction.php?id=<?php echo $MVID; ?>" method="post" accept-charset="utf-8" autocomplete="off">
+						<div id="formbox">
+							<input type="text" name="Text" id="editruta" placeholder="Ny" value="'.$row2["Text"].'" required>
+								<textarea name="story" id="storyedit">'.$row2["Story"].'</textarea><br>
+							<input type="submit" class="button" value="Ändra">
+						</div>
+					</form>';
 				}
-				}
-			catch(PDOException $e)
-				{
-					print 'Exception : '.$e->getMessage();
-				}
-				} else
-				{
-					echo "Glömde nycklarna Hemma";
-					print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';
-					break;
-				}
+			}
+			catch(PDOException $e){
+				print 'Exception : '.$e->getMessage();
+			}
+			} else{
+				echo "Glömde nycklarna Hemma";
+			}
 			?>
-			<form action="editAction.php?id=<?php echo $MVID; ?>" method="post" accept-charset="utf-8" autocomplete="off">
-				<div id="formbox">
-					<input type="text" name="Text" id="editruta" placeholder="Ny" value="<?php echo $row2['Text']?>" required>
-					<textarea name="story" id="storyedit"><?php echo $row2['Story'];?></textarea><br>
-					<input type="submit" class="button" value="Ändra">
-				</div>
-			</form>
+			
 			<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>
 		</div>
 	</body>
