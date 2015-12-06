@@ -37,7 +37,7 @@
 		<div id="wrapper">
 			<h1><a href="zahabe.php">Minns vi den gången Zahabe...</a></h1>
 			<div class="lank edit">
-				<a href="allstories.php" title="Stories"><img src="assets/read.jpg" alt="Stories"></a>
+				<a href="allstories.php" title="Attatchments"><img src="assets/read.png" alt="Attatchments"></a>
 				
 			</div>
 			<div class="lank edit rightmenu">
@@ -53,7 +53,7 @@
 				<b>Dagens Zahabe:</b>
 				<ol>
 				<?php
-
+				
 				try
 						{
 							$db = new PDO('sqlite:zahabe.db');
@@ -80,7 +80,7 @@
 							$myfileR = fopen("daily.txt", "r") or die("Unable to open file!");
 							if (fgets($myfileR) != floor(time() / (60*60*24))) {
 								$myfileW = fopen("daily.txt", "w") or die("Unable to open file!");
-								fwrite($myfileW, floor(time() / (60*60*24))."\n");
+								fwrite($myfileW, floor((time() + 3600) / (60*60*24))."\n");
 								fwrite($myfileW, rand(0, $rowCnt));
 								fclose($myfileW);
 							}
@@ -92,8 +92,6 @@
 							$daily = fgets($myfileR);
 							fclose($myfileR);
 
-							//srand(floor(time() / (60*60*24)));
-							//$daily = rand(0, 520) % $rowCnt;
 							
 							$query = 'SELECT Text, ID, Story, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
 												FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID ORDER BY ID asc
@@ -101,7 +99,7 @@
 							$result = $db->query($query);
 							foreach($result as $row) {
 							  if (isset($row['Story'])) {
-								print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.jpg' alt='read full'></a></div>";
+								print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
 								print "<a href='story.php?id=".$row['ID']."'><li value='".$row['cnt']."'><span>".$row['Text']."</span></li></a>";
 							  } else {
 								print "<li value='".$row['cnt']."'>".$row['Text']."</li>";
@@ -127,7 +125,7 @@
 							foreach($result as $row)
 							{
 							  if (isset($row['Story'])) {
-								print "<div class='storyicon'><a href='story.php?id=".$row['MVID']."'><img src='assets/read.jpg' alt='read full'></a></div>";
+								print "<div class='storyicon'><a href='story.php?id=".$row['MVID']."'><img src='assets/read.png' alt='read full'></a></div>";
 								print "<a href='story.php?id=".$row['MVID']."'><li><span>".$row['Text']."</span></li></a>";
 							  } else {
 								print "<li>".$row['Text']."</li>";

@@ -40,7 +40,7 @@
 		<div id="wrapper">
 			<h1><a href="zahabe.php">Minns vi den gången Zahabe...</a></h1>
 			<div class="lank edit">
-				<a href="allstories.php" title="Stories"><img src="assets/read.jpg" alt="Stories"></a>
+				<a href="allstories.php" title="Stories"><img src="assets/read.png" alt="Stories"></a>
 			</div>
 			<div class="lank edit rightmenu">
 				<a href="remove.php?id=<?php echo $ID;?>" title="Edit"><img src="assets/edit.png" alt="edit"></a>
@@ -58,7 +58,7 @@
 							foreach($result as $row)
 							{
 							  if (isset($row['Story'])) {
-								print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.jpg' alt='read full'></a></div>";
+								print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
 								print "<a href='story.php?id=".$row['ID']."'><li value='".$row['cnt']."'><span>".$row['Text']."</span></li></a>";
 							  } else {
 								print "<li>".$row['Text']."</li>";

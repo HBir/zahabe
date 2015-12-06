@@ -92,8 +92,9 @@ a {
 	top: 30px;
 }
 .edit img {
-	width: 25px; height: 25px;
+	height: 25px;
 	opacity: 0.4;
+	padding-left: 8px;
 }
 .edit img:hover {
 
@@ -123,14 +124,14 @@ a li span:hover {
 }
 .storyicon {
 	position: absolute;
-	left: 10px;
+	left: 20px;
 	
 	width: 10px;
 	height: 10px;
 }
 .storyicon img {
 	margin-top: 8px;
-	width: 30px;
+	width: 14px;
 	opacity: 0.7;
 }
 #storytext p {
@@ -153,7 +154,7 @@ width: 98%;
 margin-left:2%;
 }
 #rows {
-
+max-width: 100%;
 }
 
 #nyruta, #removeruta, #password {
