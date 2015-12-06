@@ -1,12 +1,13 @@
 <?php
-	header('Content-Type: text/html; charset=utf-8');
-	include 'functions.php';
+    /**
+    *Executes the edit functions
+    */
+    header('Content-Type: text/html; charset=utf-8');
+    require 'functions.php';
 
-	$ID = $_GET["id"];
-	$text = $_POST['Text'];
-	$story = $_POST['story'];
-	
-	
+    $ID = $_GET["id"];
+    $text = $_POST['Text'];
+    $story = $_POST['story'];
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +32,7 @@
 		<div id="wrapper">
 			<a href="zahabe.php" id="rubrik"><h1>Minns vi den gången Zahabe...</h1></a>
 			<?php 
-				$message = editMV($ID, $text, $story);
+                $message = editMV($ID, $text, $story);
 				print $message;
 				
 			?>

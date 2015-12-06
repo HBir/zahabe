@@ -26,35 +26,34 @@
 		<div id="wrapper">
 			<a href="zahabe.php" id="rubrik"><h1>Minns vi den gången Zahabe...</h1></a>
 			<?php 
-			if ($ID == '1') {
-				print '...försökte rubba det fundament på vilket allt vilade?';
-				print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';
-				break;
-			} else if ($password == "iklabbe") {
-			try{
-				$db = new PDO('sqlite:zahabe.db');
+            if ($ID == '1') {
+                print '...försökte rubba det fundament på vilket allt vilade?';
+            } else if ($password == "iklabbe") {
+            try{
+                $db = new PDO('sqlite:zahabe.db');
 
-				$row2 = getMVByNumber($db, $ID);
-				$MVID = $row2['ID'];
+                $row2 = getMVByNumber($db, $ID);
+                $MVID = $row2['ID'];
 
-				if (empty($MVID)){
-					print '...gick vilse?';
-				} else {
-					echo '<form action="editAction.php?id=<?php echo $MVID; ?>" method="post" accept-charset="utf-8" autocomplete="off">
-						<div id="formbox">
-							<input type="text" name="Text" id="editruta" placeholder="Ny" value="'.$row2["Text"].'" required>
-								<textarea name="story" id="storyedit">'.$row2["Story"].'</textarea><br>
-							<input type="submit" class="button" value="Ändra">
-						</div>
-					</form>';
-				}
-			}
-			catch(PDOException $e){
-				print 'Exception : '.$e->getMessage();
-			}
-			} else{
-				echo "Glömde nycklarna Hemma";
-			}
+                if (empty($MVID)){
+                    print '...gick vilse?';
+                } else {
+                    echo '<form action="editAction.php?id='.$MVID.'" method="post" accept-charset="utf-8" autocomplete="off">
+                        <div id="formbox">
+                            <input type="text" name="Text" id="editruta" placeholder="Ny" value="'.$row2["Text"].'" required>
+                                <textarea name="story" id="storyedit">'.$row2["Story"].'</textarea><br>
+                            <input type="submit" class="button" value="Ändra">
+                        </div>
+                    </form>';
+                }
+            }
+            catch(PDOException $e)
+            {
+                print 'Exception : '.$e->getMessage();
+            }
+            } else{
+                echo "Glömde nycklarna Hemma";
+            }
 			?>
 			
 			<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>
