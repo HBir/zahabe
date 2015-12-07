@@ -16,6 +16,17 @@
 		<link rel="stylesheet" href="style.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>
+            function refreshPage() {
+                $("#MVs").load("ajaxMV.php");
+            }
+            $(window).load(function(){
+                refreshPage()
+                setInterval ( "refreshPage()", 5000 );
+            });
+
+
+        </script>
         <!--Google analytics kod-->
 		<script>
 			(function (i, s, o, g, r, a, m) {
@@ -80,13 +91,15 @@
                     }catch(PDOException $e){
                         print 'Exception : '.$e->getMessage();
                     }
-
+                    $db = NULL;
 				?></ol>
 			</div>
 			<div id="rows">
-				<ol reversed>
+				<ol reversed id="MVs">
+                    
 					<?php
-						try{
+
+                        /*try{
                             $result = getAllMVs($db);
 
                             foreach($result as $row)
@@ -101,7 +114,7 @@
                                     echo "<div class='IPRemoveIcon'><a href='".$row['ID']."'><img src='assets/cross.png' alt='remove'></a></div>";
                                 }
 
-                                */
+                                
                                 print "<li>".$row['Text']."</li>";
                                 
                                 
@@ -112,7 +125,7 @@
                         catch(PDOException $e)
                         {
                             print 'Exception : '.$e->getMessage();
-                        }
+                        }*/
 					?>
 				</ol>
 			</div>
