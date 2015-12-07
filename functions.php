@@ -18,7 +18,7 @@ function nl2p($string)
 function getAllMVs($db){
     /**Hämtar alla inlägg i databasen sorterade efter tid inlagt**/
 
-    $stmt = $db->prepare('SELECT Text, ID, Story, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
+    $stmt = $db->prepare('SELECT Text, ID, Story, SkrivenAv, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
                             FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID ORDER BY ID desc'
     );
     $stmt->execute();
@@ -55,9 +55,10 @@ function getDailyMV($db)
     $stmt->execute();
     $row = $stmt->fetch();
     $rowCnt = $row['cnt'];
-                            
+    
+
     $myfileR = fopen("daily.txt", "r") or die("Unable to open file!");
-    if (fgets($myfileR) != floor(time() / (60*60*24))) {
+    if (fgets($myfileR) != floor((time() + 3600) / (60*60*24))) {
         $myfileW = fopen("daily.txt", "w") or die("Unable to open file!");
         fwrite($myfileW, floor((time() + 3600) / (60*60*24))."\n");
         fwrite($myfileW, rand(0, $rowCnt));
@@ -105,11 +106,11 @@ function addMV($Text)
             if (strpos($Text, $banned) !== false) {
                 return "...hittade det förbjudna";
                 }
-            }    
+            }
         try
         {
             $db = new PDO('sqlite:zahabe.db');
-    
+
             $result = $db->query('SELECT * FROM MinnsDu');
                 foreach($result as $row)
                 {
@@ -117,7 +118,6 @@ function addMV($Text)
                         return "...försökte duplicera sin död";
                     }
                 }
-
             $ip = $_SERVER['REMOTE_ADDR'];
             $stmt = $db->prepare("INSERT INTO MinnsDu (Text, SkrivenAv) VALUES (:Text, :SkrivenAv)");
 

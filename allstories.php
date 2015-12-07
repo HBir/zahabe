@@ -23,14 +23,14 @@
   		m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
   		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 		<?php
-		$userId = $_SERVER['REMOTE_ADDR'];
+        $userId = $_SERVER['REMOTE_ADDR'];
 
-		if (isset($userId)) {
-		  $gacode = "ga('create', 'UA-63495608-1', { 'userId': '%s' });";
-		  echo sprintf($gacode, $userId);
-		} else {
-		  $gacode = "ga('create', 'UA-63495608-1');";
-		  echo sprintf($gacode);
+        if (isset($userId)) {
+          $gacode = "ga('create', 'UA-63495608-1', { 'userId': '%s' });";
+          echo sprintf($gacode, $userId);
+        } else {
+          $gacode = "ga('create', 'UA-63495608-1');";
+          echo sprintf($gacode);
 		}?>
   		ga('send', 'pageview');
 
@@ -50,25 +50,25 @@
 				<ol>
 					<?php
 						try
-						{
-							$db = new PDO('sqlite:zahabe.db');
-						
-							$result = getAllStories($db);
-							foreach($result as $row)
-							{
-							  if (isset($row['Story'])) {
-								print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
-								print "<a href='story.php?id=".$row['ID']."'><li value='".$row['cnt']."'><span>".$row['Text']."</span></li></a>";
-							  } else {
-								print "<li>".$row['Text']."</li>";
-							  }
-							}
-							$db = NULL;
-						}
-						catch(PDOException $e)
-						{
-							print 'Exception : '.$e->getMessage();
-						}
+                        {
+                            $db = new PDO('sqlite:zahabe.db');
+                        
+                            $result = getAllStories($db);
+                            foreach($result as $row)
+                            {
+                              if (isset($row['Story'])) {
+                                print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
+                                print "<a href='story.php?id=".$row['ID']."'><li value='".$row['cnt']."'><span>".$row['Text']."</span></li></a>";
+                              } else {
+                                print "<li>".$row['Text']."</li>";
+                              }
+                            }
+                            $db = NULL;
+                        }
+                        catch(PDOException $e)
+                        {
+                            print 'Exception : '.$e->getMessage();
+                        }
 					?>
 				</ol>
 			</div>

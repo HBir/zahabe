@@ -31,14 +31,14 @@
 		<div id="wrapper">
 			<a href="zahabe.php" id="rubrik"><h1>Minns vi den gången Zahabe...</h1></a>
 			<?php
-				include 'functions.php';
-				header('Content-Type: text/html; charset=utf-8');
+                include 'functions.php';
+                header('Content-Type: text/html; charset=utf-8');
 
-				$ID = $_POST['ID'];
-				$password = $_POST['password'];
-				
-				$message = removeMV($password, $ID);
-				print $message;
+                $ID = $_POST['ID'];
+                $password = $_POST['password'];
+                
+                $message = removeMV($password, $ID);
+                print $message;
 			?>
 			<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>
 		</div>

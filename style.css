@@ -134,6 +134,24 @@ a li span:hover {
 	width: 14px;
 	opacity: 0.7;
 }
+
+.IPRemoveIcon {
+	position: absolute;
+	right: 20px;
+	
+	width: 10px;
+	height: 10px;
+}
+
+.IPRemoveIcon img {
+
+	width: 25px;
+	opacity: 0.1;
+}
+.IPRemoveIcon img:hover{
+	opacity: 0.5;
+}
+
 #storytext p {
 	text-indent: 30px;
 
