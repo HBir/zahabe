@@ -104,6 +104,7 @@ function addMV($Text)
     if ( $first == 'Minns vi den gången Zahabe ' && $last =='?') {
         foreach($bannedWords as $banned) {
             if (strpos($Text, $banned) !== false) {
+                http_response_code(403);
                 return "...hittade det förbjudna";
                 }
             }
@@ -115,6 +116,7 @@ function addMV($Text)
                 foreach($result as $row)
                 {
                     if ($row['Text'] == $Text) {
+                        http_response_code(409);
                         return "...försökte duplicera sin död";
                     }
                 }
@@ -135,6 +137,7 @@ function addMV($Text)
         return TRUE;
         die();
     } else {
+    http_response_code(406);
     return "... inte förstod?";
     }
 }

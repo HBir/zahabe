@@ -152,6 +152,12 @@ a li span:hover {
 	opacity: 0.5;
 }
 
+#errorspace {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
 #storytext p {
 	text-indent: 30px;
 

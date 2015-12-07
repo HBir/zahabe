@@ -20,11 +20,46 @@
             function refreshPage() {
                 $("#MVs").load("ajaxMV.php");
             }
-            $(window).load(function(){
-                refreshPage()
-                setInterval ( "refreshPage()", 5000 );
+            $(document).ready(function () {
+                $("#MVform").submit(function (e) {
+
+                    var url = "add.php"; // the script where you handle the form input.
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: $("#MVform").serialize(), // serializes the form's elements.
+                        success: function (data) {
+                            document.getElementById("nyruta").value = '';
+                            $('#errorspace').html("");
+                            refreshPage(); // show response from the php script.
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            switch (errorThrown) {
+                                case "Not Acceptable":
+                                    $('#errorspace').html("...inte förstod");
+                                    break;
+                                case "Conflict":
+                                    $('#errorspace').html("......försökte duplicera sin död");
+                                    break;
+                                case "Forbidden":
+                                    $('#errorspace').html("...hittade det förbjudna");
+                                    break;
+                            }
+                            
+                            
+                            
+                        }
+                    });
+
+                    e.preventDefault(); // avoid to execute the actual submit of the form.
+                });
             });
 
+            $(window).load(function () {
+                refreshPage();
+                setInterval("refreshPage()", 5000);
+            });
 
         </script>
         <!--Google analytics kod-->
@@ -58,6 +93,7 @@
                 });
             </script>
             <h1><a href="zahabe.php">Minns vi den gången Zahabe...</a></h1>
+            <div id="errorspace"></div>
 			<div class="lank edit">
 				<a href="allstories.php" title="Attatchments"><img src="assets/read.png" alt="Attatchments"></a>
 				
@@ -65,12 +101,13 @@
 			<div class="lank edit rightmenu">
 				<a href="remove.php" title="Edit"><img src="assets/edit.png" alt="edit"></a>
 			</div>
-			<form action="add.php" method="post" accept-charset="utf-8" autocomplete="off">
+			<form id="MVform" action="add.php" method="post" accept-charset="utf-8" autocomplete="off">
 				<div id="formbox">
 					<input type="text" name="Text" id="nyruta" placeholder="Ny" required>
 					<button type="submit" id="nybutton">Lägg till</button>
 				</div>
 			</form>
+            
 			<div id="dagens">
 				<b>Dagens Zahabe:</b>
 				<ol>
