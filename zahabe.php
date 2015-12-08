@@ -17,22 +17,35 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script>
-            function refreshPage() {
-                $("#MVs").load("ajaxMV.php");
+            var xml;
+            function refreshPage(type) {
+                $.get("ajaxMV.php", function (data) {
+                    if (xml != data) {
+                        if (xml && type != "add") {
+                            /*Alert goes here*/
+                            var audio = new Audio('assets/alert.wav');
+                            audio.volume=.2;
+                            audio.play();
+                        }
+                        xml = data;
+                        $("#MVs").html(xml);
+                    }
+                });
             }
+
             $(document).ready(function () {
                 $("#MVform").submit(function (e) {
 
-                    var url = "add.php"; // the script where you handle the form input.
+                    var url = "add.php";
 
                     $.ajax({
                         type: "POST",
                         url: url,
-                        data: $("#MVform").serialize(), // serializes the form's elements.
+                        data: $("#MVform").serialize(),
                         success: function (data) {
                             document.getElementById("nyruta").value = '';
                             $('#errorspace').html("");
-                            refreshPage(); // show response from the php script.
+                            refreshPage("add");
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             switch (errorThrown) {
@@ -46,19 +59,16 @@
                                     $('#errorspace').html("...hittade det förbjudna");
                                     break;
                             }
-                            
-                            
-                            
                         }
                     });
-
-                    e.preventDefault(); // avoid to execute the actual submit of the form.
+                    e.preventDefault();
                 });
             });
 
             $(window).load(function () {
-                refreshPage();
-                setInterval("refreshPage()", 5000);
+                refreshPage("");
+
+                setInterval("refreshPage('')", 5000);
             });
 
         </script>
@@ -135,7 +145,9 @@
 				<ol reversed id="MVs">
                     
 					<?php
-
+                        /*This place is populated by AJAX from ajaxMV.php*/
+                        
+                        /*Old non-ajax below*/
                         /*try{
                             $result = getAllMVs($db);
 

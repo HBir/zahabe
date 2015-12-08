@@ -16,7 +16,8 @@ function nl2p($string)
 }
 
 function getAllMVs($db){
-    /**Hämtar alla inlägg i databasen sorterade efter tid inlagt**/
+    /**Hämtar alla inlägg i databasen sorterade efter tid inlagt
+     * Innehåller fälten Text, ID, Story, SkrivenAv, cnt**/
 
     $stmt = $db->prepare('SELECT Text, ID, Story, SkrivenAv, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
                             FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID ORDER BY ID desc'
@@ -190,9 +191,7 @@ function editMV($ID, $text, $story)
         /*$result = $db->query('SELECT * FROM MinnsDu');
         foreach($result as $row){
             if ($row['Text'] == $text) {
-                print "...försökte duplicera sin död";
-                print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';
-                return;
+                return "...försökte duplicera sin död";
             }
         }*/
         $stmt = $db->prepare("UPDATE MinnsDu
