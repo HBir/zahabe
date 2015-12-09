@@ -52,13 +52,14 @@ font-size: 20px;
 
 
 #editruta {
-	width: 800px;
+	width: 817px;
 	font-size: 20px;
 	margin:10px;
 }
 
 #newPos {
-    width: 100px;
+    width: 70px;
+    font-size: 20px;
 }
 
 #removeruta {
