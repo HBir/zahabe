@@ -16,11 +16,11 @@ function nl2p($string)
 }
 
 function getAllMVs($db){
-    /**Hämtar alla inlägg i databasen sorterade efter tid inlagt
-     * Innehåller fälten Text, ID, Story, SkrivenAv, cnt**/
+    /**Hämtar alla inlägg i databasen sorterade efter tid inlagt**/
 
-    $stmt = $db->prepare('SELECT Text, ID, Story, SkrivenAv, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
-                            FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID ORDER BY ID desc'
+    $stmt = $db->prepare(
+        'SELECT Text, ID, Story, SkrivenAv, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
+        FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID ORDER BY MVOrder desc'
     );
     $stmt->execute();
     $result = $stmt->fetchAll();
@@ -30,8 +30,12 @@ function getAllMVs($db){
 function getMVByID($db, $ID)
 {
     /**Hämtar det inlägg med ett specifikt ID*/
-    $stmt = $db->prepare("SELECT Text, ID, Story, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
-                            FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID WHERE ID = :ID ORDER BY ID asc");
+    $stmt = $db->prepare(
+        "SELECT MVID, Story, Text, MVOrder, (select count(*) from MinnsDu b  where a.MVOrder >= b.MVOrder) as cnt
+        FROM Stories
+        INNER JOIN MinnsDu a ON a.ID=Stories.MVID 
+        WHERE MVID = :ID"
+    );
     $stmt->bindParam(':ID', $ID);
     $stmt->execute();
     return $stmt->fetch();
@@ -40,9 +44,10 @@ function getMVByID($db, $ID)
 function getMVByNumber($db, $cnt)
 {
     /**Hämtar det inlägg som är nr $cnt i ordningen */
-    $stmt = $db->prepare("SELECT * FROM MinnsDu 
-                            LEFT JOIN Stories ON MinnsDu.ID=Stories.MVID 
-                            WHERE ID = (SELECT ID FROM MinnsDu ORDER BY ID asc LIMIT 1 OFFSET :CNT-1)"
+    $stmt = $db->prepare(
+        "SELECT * FROM MinnsDu 
+        LEFT JOIN Stories ON MinnsDu.ID=Stories.MVID 
+        WHERE ID = (SELECT ID FROM MinnsDu ORDER BY MVOrder asc LIMIT 1 OFFSET :CNT-1)"
     );
     $stmt->bindParam(':CNT', $cnt);
     $stmt->execute();
@@ -74,9 +79,11 @@ function getDailyMV($db)
     fclose($myfileR);
 
                             
-    $stmt2 = $db->prepare("SELECT Text, ID, Story, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
-                                                FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID ORDER BY ID asc
-                                                LIMIT 1 OFFSET :DAILY");
+    $stmt2 = $db->prepare(
+        "SELECT Text, ID, Story, MVOrder, (select count(*) from MinnsDu b  where a.MVOrder >= b.MVOrder) as cnt
+        FROM MinnsDu a LEFT JOIN Stories ON a.ID = Stories.MVID ORDER BY MVOrder asc
+        LIMIT 1 OFFSET :DAILY"
+    );
     $daily = intval($daily)-1;
     $stmt2->bindParam(':DAILY', ($daily));
     $stmt2->execute();
@@ -87,8 +94,9 @@ function getDailyMV($db)
 function getAllStories($db)
 {
     /**Hämtar alla inlägg med bilagor*/
-    $stmt = $db->prepare('SELECT Text, ID, Story, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
-                            FROM MinnsDu a INNER JOIN Stories ON a.ID = Stories.MVID ORDER BY ID desc'
+    $stmt = $db->prepare(
+        'SELECT Text, ID, Story, MVOrder, (select count(*) from MinnsDu b  where a.MVOrder >= b.MVOrder) as cnt
+        FROM MinnsDu a INNER JOIN Stories ON a.ID = Stories.MVID ORDER BY MVOrder desc'
     );
     $stmt->execute();
     $result = $stmt->fetchAll();
@@ -101,45 +109,55 @@ function addMV($Text)
     $first = substr($Text, 0, 28);
     $last = substr($Text, -1);
     $bannedWords = array("<", ">");
-
+    
     if ( $first == 'Minns vi den gången Zahabe ' && $last =='?') {
-        foreach($bannedWords as $banned) {
+        foreach ($bannedWords as $banned) {
             if (strpos($Text, $banned) !== false) {
                 http_response_code(403);
                 return "...hittade det förbjudna";
-                }
             }
+        }
         try
         {
+            
             $db = new PDO('sqlite:zahabe.db');
 
             $result = $db->query('SELECT * FROM MinnsDu');
-                foreach($result as $row)
-                {
-                    if ($row['Text'] == $Text) {
-                        http_response_code(409);
-                        return "...försökte duplicera sin död";
-                    }
+            foreach ($result as $row) {
+                if ($row['Text'] == $Text) {
+                    http_response_code(409);
+                    return "...försökte duplicera sin död";
                 }
+            }
+            
             $ip = $_SERVER['REMOTE_ADDR'];
-            $stmt = $db->prepare("INSERT INTO MinnsDu (Text, SkrivenAv) VALUES (:Text, :SkrivenAv)");
+            $stmt = $db->prepare(
+                "INSERT INTO MinnsDu (Text, SkrivenAv)
+                VALUES (:Text, :SkrivenAv)"
+            );
 
             $stmt->bindParam(':Text', $Text);
             $stmt->bindParam(':SkrivenAv', $ip);
             $Rowtext = $Text;
             $stmt->execute();
+            $stmt2 = $db->prepare(
+                "UPDATE MinnsDu
+                SET MVOrder = last_insert_rowid()
+                WHERE ID = last_insert_rowid()"
+            );
+            $stmt2->execute();
 
-            $db = NULL;
+            $db = null;
         }
         catch(PDOException $e)
         {
             return 'Exception : '.$e->getMessage();
         }
-        return TRUE;
-        die();
+            return true;
+            die();
     } else {
-    http_response_code(406);
-    return "... inte förstod?";
+        http_response_code(406);
+        return "... inte förstod?";
     }
 }
 
@@ -155,21 +173,21 @@ function removeMV($password, $ID)
         }
         try{
             $db = new PDO('sqlite:zahabe.db');
-            $result = $db->query('SELECT * FROM MinnsDu ORDER BY ID asc LIMIT 1 OFFSET ' . $ID . '-1');
+            $result = $db->query('SELECT * FROM MinnsDu ORDER BY MVOrder asc LIMIT 1 OFFSET ' . $ID . '-1');
                 
             $db->query('delete from MinnsDu 
                         where id = (
                         select id from 
-                        (select id from MinnsDu order by id limit 1 OFFSET ' . $ID . '-1) 
+                        (select id from MinnsDu order by MVOrder limit 1 OFFSET ' . $ID . '-1) 
                         as t
                         )');
             $i = 0;    
-            foreach($result as $row){
+            foreach ($result as $row) {
                 return "..tog bort raden: ".$row['Text']."<br>";
                 $i = 1;
             }
                 
-            if ($i == 0){
+            if ($i == 0) {
                 return "Rad nummer ".$ID." existerar ej";
             }
             $db = NULL;
@@ -186,17 +204,20 @@ function editMV($ID, $text, $story)
     /*Ändrar en MV*/
     $part = substr($text, 0, 28);
     $last = substr($text, -1);
-    if ( $part == 'Minns vi den gången Zahabe ' && $last =='?'){
+    if ( $part == 'Minns vi den gången Zahabe ' && $last =='?') {
         $db = new PDO('sqlite:zahabe.db');
         /*$result = $db->query('SELECT * FROM MinnsDu');
         foreach($result as $row){
             if ($row['Text'] == $text) {
-                return "...försökte duplicera sin död";
+                print "...försökte duplicera sin död";
+                print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';
+                return;
             }
         }*/
-        $stmt = $db->prepare("UPDATE MinnsDu
-                                SET Text=:Text
-                                where ID = :id "
+        $stmt = $db->prepare(
+            "UPDATE MinnsDu
+            SET Text=:Text
+            where ID = :id "
         );
         $stmt->bindParam(':Text', $text);
         $stmt->bindParam(':id', $ID);
@@ -218,6 +239,31 @@ function editMV($ID, $text, $story)
     } else {
         return "... inte förstod?";
     }
+}
+
+function replaceMVOrder($ID, $NewPos){
+    $db = new PDO('sqlite:zahabe.db');
+    $pos1 = getMVByNumber($db, $NewPos);
+    $pos2 = getMVByNumber($db, ($NewPos+1));
+    $calcPos = $pos1["MVOrder"]+(($pos2["MVOrder"]-$pos1["MVOrder"])/2);
+    if ($calcPos <= 1) {
+        return FALSE;
+    }
+    try {
+        $stmt = $db->prepare(
+            "UPDATE MinnsDu
+            SET MVOrder=:MVOrder
+            where ID = :id "
+        );
+        $stmt->bindParam(':MVOrder', $calcPos);
+        $stmt->bindParam(':id', $ID);
+        $stmt->execute();
+    } catch(PDOException $e) {
+            return 'Exception : '.$e->getMessage();
+    }
+    $db = null;
+    return true;
+
 }
 
 ?>

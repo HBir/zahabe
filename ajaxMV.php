@@ -16,7 +16,6 @@ try {
             echo "<div class='IPRemoveIcon'><a href='".$row['ID']."'><img src='assets/cross.png' alt='remove'></a></div>";
             }*/
             
-            
             print "<li>" . $row['Text'] . "</li>";
         }
     }
@@ -25,4 +24,5 @@ try {
 catch (PDOException $e) {
     print 'Exception : ' . $e->getMessage();
 }
+
 ?>

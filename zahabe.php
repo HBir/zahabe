@@ -17,22 +17,28 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script>
-            var xml;
+            var oldData = "";
+            var newMvs = 0;
+
             function refreshPage(type) {
                 $.get("ajaxMV.php", function (data) {
-                    if (xml != data) {
-                        if (xml && type != "add") {
+                    if (oldData != data) {
+                        if (oldData != "" && type != "add") {
                             /*Alert goes here*/
-                            var audio = new Audio('assets/alert.wav');
-                            audio.volume=.2;
-                            audio.play();
+                            //data.substring(data.indexOf("<li>") + 4, data.indexOf("</li>"));
+                            console.log("New MV!");
+                            newMvs++;
+                            document.title = "(" + newMvs + ") Minns vi den gången Zahabe";
                         }
-                        xml = data;
-                        $("#MVs").html(xml);
+                        $("#MVs").html(data);
+                        oldData = data;
                     }
                 });
             }
-
+            $(window).focus(function () {
+                document.title = "Minns vi den gången Zahabe";
+                newMvs = 0;
+            });
             $(document).ready(function () {
                 $("#MVform").submit(function (e) {
 
@@ -53,11 +59,13 @@
                                     $('#errorspace').html("...inte förstod");
                                     break;
                                 case "Conflict":
-                                    $('#errorspace').html("......försökte duplicera sin död");
+                                    $('#errorspace').html("...försökte duplicera sin död");
                                     break;
                                 case "Forbidden":
                                     $('#errorspace').html("...hittade det förbjudna");
                                     break;
+                                default:
+                                    $('#errorspace').html("...fick " + errorThrown);
                             }
                         }
                     });
@@ -67,7 +75,6 @@
 
             $(window).load(function () {
                 refreshPage("");
-
                 setInterval("refreshPage('')", 5000);
             });
 
@@ -95,15 +102,8 @@
 	</head>
 	<body>
 		<div id="wrapper">
-			<script>
-                $(document).ready(function(){
-                    $("button").click(function(){
-                        $("#test").hide();
-                    });
-                });
-            </script>
             <h1><a href="zahabe.php">Minns vi den gången Zahabe...</a></h1>
-            <div id="errorspace"></div>
+            <div id="errorspace"><!--Error messages appear here--></div>
 			<div class="lank edit">
 				<a href="allstories.php" title="Attatchments"><img src="assets/read.png" alt="Attatchments"></a>
 				
@@ -124,7 +124,8 @@
 				<?php
 				try{
                     $db = new PDO('sqlite:zahabe.db');
-                            
+                    
+                    
                     $row = getDailyMV($db);
 
 
@@ -134,7 +135,7 @@
                     } else {
                         print "<li value='".$row['cnt']."'>".$row['Text']."</li>";
                     }
-                            
+                    
                     }catch(PDOException $e){
                         print 'Exception : '.$e->getMessage();
                     }

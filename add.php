@@ -22,10 +22,9 @@
 			<a href="zahabe.php"><h1>Minns vi den gången Zahabe...</h1></a>
 
 			<?php
-			include 'functions.php';
+            include 'functions.php';
 			$text = $_POST['Text'];
 			$message = addMV($text);
-	
 			if ($message !== TRUE){
 				print $message;
 				print '<div class="lank"><p><a href="zahabe.php">Tillbaka</a></p></div>';

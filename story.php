@@ -5,14 +5,7 @@
     $ID = $_GET["id"];
     $db = new PDO('sqlite:zahabe.db');
 
-    
-    $stmt = $db->prepare("SELECT MVID, Story, Text, (select count(*) from MinnsDu b  where a.id >= b.id) as cnt
-                        FROM Stories
-                        INNER JOIN MinnsDu a ON a.ID=Stories.MVID 
-                        WHERE MVID = :ID");
-    $stmt->bindParam(':ID', $ID);
-    $stmt->execute();
-    $row = $stmt->fetch();
+    $row = getMVByID($db, $ID);
 
 ?>
 <html lang="en">

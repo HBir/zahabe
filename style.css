@@ -57,6 +57,10 @@ font-size: 20px;
 	margin:10px;
 }
 
+#newPos {
+    width: 100px;
+}
+
 #removeruta {
 	width: 90px;
 	margin:10px;

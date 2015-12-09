@@ -32,6 +32,14 @@
 		<div id="wrapper">
 			<a href="zahabe.php" id="rubrik"><h1>Minns vi den gången Zahabe...</h1></a>
 			<?php 
+                
+                if (isset($_POST['newPos'])) {
+                    if (!replaceMVOrder($ID, $_POST['newPos'])) {
+                        print "...Skjöt genom taket";
+                        return;
+                    }
+                }
+                
                 $message = editMV($ID, $text, $story);
 				print $message;
 				
