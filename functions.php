@@ -243,8 +243,8 @@ function editMV($ID, $text, $story)
 
 function replaceMVOrder($ID, $NewPos){
     $db = new PDO('sqlite:zahabe.db');
-    $pos1 = getMVByNumber($db, $NewPos);
-    $pos2 = getMVByNumber($db, ($NewPos+1));
+    $pos1 = getMVByNumber($db, $NewPos-1);
+    $pos2 = getMVByNumber($db, ($NewPos));
     $calcPos = $pos1["MVOrder"]+(($pos2["MVOrder"]-$pos1["MVOrder"])/2);
     if ($calcPos <= 1) {
         return FALSE;
