@@ -31,6 +31,8 @@ body {
 
 li {
 margin:10px;
+/*margin-top: 5px;
+margin-bottom: 5px;*/
 font-size: 20px;
 }
 .button {
@@ -196,6 +198,10 @@ width:70%;
 #dagens {
 	max-width: 90%;
 }
+#h1 {
+    font-size: 1.5em;
+    color: blue;
+}
 }
 
 #storytext > p > img {
@@ -221,4 +227,39 @@ width:70%;
 #dagens > ol > li {
 	margin-top: 0px;
 	margin-bottom: 0px;
+}
+
+hr {
+    background:lightgray;
+    border:0; 
+    height:1px;
+    margin: 0px;
+}
+
+#sidebarLeft {
+    float: left;
+}
+
+#sidebarRight {
+    float: right;
+    right: 0px;
+
+}
+#sidebarRight,#sidebarLeft {
+    /*background-color: white;*/
+    width: 410px;
+    height: 500px;
+    /*width: 40vh;
+    height: 40vh;*/
+    margin:10px;
+    position: absolute;
+}
+#sidebarLeft>img,#sidebarRight>img {
+    width: 100%;
+}
+#bigwrapper {
+    max-width: 100%;
+    width: 1900px;
+    background: gray;
+    margin:0 auto;
 }

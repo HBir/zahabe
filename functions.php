@@ -1,8 +1,9 @@
 
 <?php
 /**
-*Innehåller funktione
+*Innehåller funktioner
 */
+//date_default_timezone_set('Europe/Stockholm');
 function nl2p($string)
 {
     /**Gör om radbrytning i sträng till ny paragraf*/
@@ -54,6 +55,14 @@ function getMVByNumber($db, $cnt)
     return $stmt->fetch();
 }
 
+function getMVAmount($db){
+    $stmt = $db->prepare('SELECT COUNT (*) as cnt FROM MinnsDu');
+    $stmt->execute();
+    $row = $stmt->fetch();
+    return $row['cnt'];
+}
+
+
 function getDailyMV($db)
 {
     /*Hämtar dagens slumpade MV. Skapar även ny dagens MV ifall det är första gången funktionen körs för dagen*/
@@ -103,13 +112,29 @@ function getAllStories($db)
     return $result;
 }
 
+function prepare_MV($db, $Text, $Activation) 
+{
+    /**Förbereder en MV som automatiskt ska placeras på plats $Activation */
+    if (getMVAmount($db) == $Activation-1) {
+        addMV($Text);
+    } 
+
+}
+
 function addMV($Text)
 {
     /*Lägger till ett nytt MV*/
+    $ip = $_SERVER['REMOTE_ADDR'];
     $first = substr($Text, 0, 28);
     $last = substr($Text, -1);
     $bannedWords = array("<", ">");
+    $bannedIPs = array();
     
+    if (in_array($ip, $bannedIPs)) {
+        http_response_code(401);
+        return "...gjorde bort sig totalt";
+    }
+
     if ( $first == 'Minns vi den gången Zahabe ' && $last =='?') {
         foreach ($bannedWords as $banned) {
             if (strpos($Text, $banned) !== false) {
@@ -119,7 +144,6 @@ function addMV($Text)
         }
         try
         {
-            
             $db = new PDO('sqlite:zahabe.db');
 
             $result = $db->query('SELECT * FROM MinnsDu');
@@ -130,7 +154,6 @@ function addMV($Text)
                 }
             }
             
-            $ip = $_SERVER['REMOTE_ADDR'];
             $stmt = $db->prepare(
                 "INSERT INTO MinnsDu (Text, SkrivenAv)
                 VALUES (:Text, :SkrivenAv)"

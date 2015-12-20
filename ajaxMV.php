@@ -5,6 +5,8 @@ try {
     $db = new PDO('sqlite:zahabe.db');
     $result = getAllMVs($db);
     
+    prepare_MV($db, "Minns vi den gången Zahabe fick sin önskan uppfylld och fyllde år i distributionsmening?", 1000);
+
     foreach ($result as $row) {
         if (isset($row['Story'])) {
             print "<div class='storyicon'><a href='story.php?id=" . $row['ID'] . "'><img src='assets/read.png' alt='read full'></a></div>";
@@ -17,7 +19,9 @@ try {
             }*/
             
             print "<li>" . $row['Text'] . "</li>";
+            
         }
+        //print "<hr/>";
     }
     $db = NULL;
 }
