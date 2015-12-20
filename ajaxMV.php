@@ -5,7 +5,7 @@ try {
     $db = new PDO('sqlite:zahabe.db');
     $result = getAllMVs($db);
     
-    prepare_MV($db, "Minns vi den gången Zahabe fick sin önskan uppfylld och fyllde år i distributionsmening?", 1000);
+    
 
     foreach ($result as $row) {
         if (isset($row['Story'])) {
