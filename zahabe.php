@@ -26,7 +26,7 @@
                     if (oldData != data) {
                         if (oldData != "" && type != "add" && document.hasFocus() == false) {
                             /*Alert goes here*/
-                            //data.substring(data.indexOf("<li>") + 4, data.indexOf("</li>"));
+                            //data.substring(data.indexOf("<li class="MV">") + 4, data.indexOf("</li>"));
                             
                             console.log("New MV!");
                             newMvs++;
@@ -171,14 +171,14 @@
                             {
                               if (isset($row['Story'])) {
                                 print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
-                                print "<a href='story.php?id=".$row['ID']."'><li><span>".$row['Text']."</span></li></a>";
+                                print "<a href='story.php?id=".$row['ID']."'><li class='MV'><span>".$row['Text']."</span></li></a>";
                               } else {
                                 /*TBD - ta bort egna MVs utan lösen
                                 
                                 if ($ip == $row["SkrivenAv"]) {
                                     echo "<div class='IPRemoveIcon'><a href='".$row['ID']."'><img src='assets/cross.png' alt='remove'></a></div>";
                                 }*/
-                                print "<li>".$row['Text']."</li>";
+                                print "<li class='MV'>".$row['Text']."</li>";
                                 
                                 
                               }

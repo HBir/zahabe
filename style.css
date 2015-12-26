@@ -15,15 +15,17 @@ body {
     width:99%;
     text-align:center;
 	font-size: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 #wrapper {
     background-color: white;
 	margin:0 auto;
-	margin-top: 10px;
+	margin-top: 0px;
     width:1008px;
     height:100%;
-    border-radius:10px;
+    /*border-radius:10px;*/
     box-shadow:0 -2px 2px rgba(34,34,34,0.6);
 	display: inline-block;
 	position: relative;
@@ -263,3 +265,10 @@ hr {
     background: gray;
     margin:0 auto;
 }
+/*
+.MV {
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #eee;
+    padding: 5px;
+}*/

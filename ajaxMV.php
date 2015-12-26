@@ -10,7 +10,7 @@ try {
     foreach ($result as $row) {
         if (isset($row['Story'])) {
             print "<div class='storyicon'><a href='story.php?id=" . $row['ID'] . "'><img src='assets/read.png' alt='read full'></a></div>";
-            print "<a href='story.php?id=" . $row['ID'] . "'><li><span>" . $row['Text'] . "</span></li></a>";
+            print "<a href='story.php?id=" . $row['ID'] . "'><li class='MV'><span>" . $row['Text'] . "</span></li></a>";
         } else {
             /*TBD - ta bort egna MVs utan lösen
             
@@ -18,7 +18,7 @@ try {
             echo "<div class='IPRemoveIcon'><a href='".$row['ID']."'><img src='assets/cross.png' alt='remove'></a></div>";
             }*/
             
-            print "<li>" . $row['Text'] . "</li>";
+            print "<li class='MV'>" . $row['Text'] . "</li>";
             
         }
         //print "<hr/>";
