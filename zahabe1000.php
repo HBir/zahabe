@@ -107,16 +107,108 @@
 	</head>
 	<body>
         <div id="sidebarLeft">
+            <?php 
+            $celeb = 1000;
+            $cnt = getMVAmount($db);
+            if ($cnt >= $celeb) {
+                echo '
+                <img src="assets/dance/1000red.gif">
+            <img src="assets/dance/on-drugs.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="https://coubsecure-a.akamaihd.net/get/b147/p/coub/simple/cw_gif_big/e40f5177dfb/7f3448f0d83bb6d7b3d37/1446962482_1s0t6vz_u80z.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="assets/dance/skeleton.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/freshdance.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="assets/dance/snoopydance.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/skeleton3.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="assets/dance/pixeldance.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/rus.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="http://ak-hdl.buzzfed.com/static/enhanced/web03/2012/9/8/17/anigif_enhanced-buzz-25963-1347140900-3.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="http://ak-hdl.buzzfed.com/static/enhanced/web05/2012/9/8/17/anigif_enhanced-buzz-19987-1347140955-0.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="http://rs707.pbsrc.com/albums/ww74/onesuleman/miscellaneous_121.gif~c200">
+            <img src="assets/dance/1000blue.gif">
+            <img src="http://storage.akamai.coub.com/get/bucket:12.21/p/coub/simple/cw_gif_big/61635dd7ad7/fccc2e2533ebe0cdb69df/1409454970_1386721273_13f0ile_f8yaa8r.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="https://lh3.googleusercontent.com/-9jYlcV2jRnc/VblkgAEKFfI/AAAAAAAABFY/VkwKHRuLA_k/w426-h320/15%2B-%2B1">
+            <img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/saxdance.gif">
+            <img src="assets/dance/1000red.gif">
+            
+            
+                ';
+            }
+
+?>
             
         </div>
         <div id="sidebarRight">
-       
+            
+            <?php
+                if ($cnt >= $celeb) {
+                    echo '<img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/verka.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="assets/dance/weirdkiddance.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/citydance.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="assets/dance/kiddance.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/suitdance.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="assets/dance/skeleton2.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/giphy.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="assets/dance/scooby.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="assets/dance/white-kid-dance-club.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="http://ak-hdl.buzzfed.com/static/enhanced/web05/2012/9/8/18/anigif_enhanced-buzz-20001-1347143302-11.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="http://ak-hdl.buzzfed.com/static/enhanced/terminal05/2012/9/8/17/anigif_enhanced-buzz-5303-1347139716-5.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="http://stream1.gifsoup.com/webroot/animatedgifs5/3143438_o.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="http://31.media.tumblr.com/7b65e77d2e4f61f1be38c4f959fcedcf/tumblr_mxyvn7VtGE1sb1yhlo1_400.gif">
+            <img src="assets/dance/1000red.gif">
+            <img src="https://45.media.tumblr.com/972c978046da0b7b56c15c569abc514a/tumblr_mus1vsXII41s2wio8o1_400.gif">
+            <img src="assets/dance/1000blue.gif">
+            <img src="http://i.imgur.com/LUs4sYF.gif">
+            <img src="assets/dance/1000red.gif">
+            
+            
+            
+            ';
+
+                }
+
+            ?>
+            
             
         </div>
         
         <div id="wrapper">
             <h1><a href="zahabe.php">Minns vi den gången Zahabe...</a></h1>
             
+
+<?php
+                if ($cnt >= $celeb) {
+                    echo '<audio autoplay="autoplay" loop>
+                      <source src="assets/dance/verka.mp3" type="audio/mp3">
+                    </audio>';
+                
+                }
+
+            ?>
             
             <div id="errorspace"><!--Error messages appear here--></div>
 			<div class="lank edit">
