@@ -17,73 +17,7 @@
 		<link rel="stylesheet" href="style.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script>
-            var oldData = "";
-            var newMvs = 0;
-
-            function refreshPage(type) {
-                $.get("ajaxMV.php", function (data) {
-                    if (oldData != data) {
-                        if (oldData != "" && type != "add" && document.hasFocus() == false) {
-                            /*Alert goes here*/
-                            //data.substring(data.indexOf("<li class="MV">") + 4, data.indexOf("</li>"));
-                            
-                            console.log("New MV!");
-                            newMvs++;
-                            document.title = "(" + newMvs + ") Minns vi den gången Zahabe";
-                        }
-                        $("#MVs").html(data);
-                        oldData = data;
-                    }
-                });
-            }
-            $(window).focus(function () {
-                document.title = "Minns vi den gången Zahabe";
-                newMvs = 0;
-            });
-            $(document).ready(function () {
-                $("#MVform").submit(function (e) {
-
-                    var url = "add.php";
-
-                    $.ajax({
-                        type: "POST",
-                        url: url,
-                        data: $("#MVform").serialize(),
-                        success: function (data) {
-                            document.getElementById("nyruta").value = '';
-                            $('#errorspace').html("");
-                            refreshPage("add");
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            switch (errorThrown) {
-                                case "Not Acceptable":
-                                    $('#errorspace').html("...inte förstod");
-                                    break;
-                                case "Conflict":
-                                    $('#errorspace').html("...försökte duplicera sin död");
-                                    break;
-                                case "Forbidden":
-                                    $('#errorspace').html("...hittade det förbjudna");
-                                    break;
-                                case "Unauthorized":
-                                    $('#errorspace').html("...gjorde bort sig totalt");
-                                    break;
-                                default:
-                                    $('#errorspace').html("...fick " + errorThrown);
-                            }
-                        }
-                    });
-                    e.preventDefault();
-                });
-            });
-
-            $(window).load(function () {
-                //refreshPage("");
-                setInterval("refreshPage('')", 5000);
-            });
-
-        </script>
+        <script src="Script.js"</script>
         <!--Google analytics kod-->
 		<script>
 			(function (i, s, o, g, r, a, m) {
@@ -93,11 +27,9 @@
   		m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
   		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 		<?php
-        $userId = $_SERVER['REMOTE_ADDR'];
-
         if (isset($userId)) {
-          $gacode = "ga('create', 'UA-63495608-1', { 'userId': '%s' });";
-          echo sprintf($gacode, $userId);
+          $gacode = "ga('create', 'UA-63495608-1', { 'user': '%s' });";
+          echo sprintf($gacode, 'user');
         } else {
           $gacode = "ga('create', 'UA-63495608-1');";
           echo sprintf($gacode);
@@ -106,12 +38,21 @@
 		</script>
 	</head>
 	<body>
+        <!--<div id="header">
+            <h1 id="headerh1"><a href="zahabe.php">Minns vi den gången Zahabe...</a></h1>
+            <div class="lank edit">
+				<a href="allstories.php" title="Attatchments"><img src="assets/read.png" alt="Attatchments"></a>
+				
+			</div>
+			<div class="lank edit rightmenu">
+				<a href="remove.php" title="Edit"><img src="assets/edit.png" alt="edit"></a>
+			</div>
+        </div>-->
         <div id="sidebarLeft">
             
         </div>
         <div id="sidebarRight">
        
-            
         </div>
         
         <div id="wrapper">
