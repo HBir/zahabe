@@ -3,28 +3,26 @@ var newMvs = 0;
 var oldList = 0;
 var newList = 0;
 
-
-
-
 function refreshPage(type) {
     /*Kollar om några nya inlägg har lagts till och uppdaterar sidan asynkront ifall så är fallet*/
     $.get("ajaxMV.php", function (data) {
         var newList = (data.match(/<li/g) || []).length;
         setCookie("MVAmount", newList, 50);
-        if (newList - oldList > 0) {
+        if (newList != oldList) {
             $("#MVs").html(data);
-            
-            /*Här hanteras uppdateringsmeddelande för nya inlägg*/
-            if (oldList != 0 && type != "add" && document.hasFocus() == false) {
+            if (newList - oldList > 0) {
+                /*Här hanteras uppdateringsmeddelande för nya inlägg*/
+                if (oldList != 0 && type != "add" && document.hasFocus() == false) {
 
-                newMvs = newMvs + (newList - oldList);
-                document.title = "(" + newMvs + ") Minns vi den gången Zahabe";
+                    newMvs = newMvs + (newList - oldList);
+                    document.title = "(" + newMvs + ") Minns vi den gången Zahabe";
 
-                for (i = 1; i <= newMvs; i++) {
-                    $("#MVs li:nth-child(" + i + ")").css('background-color', '#f1f1f1');
+                    for (i = 1; i <= newMvs; i++) {
+                        $("#MVs li:nth-child(" + i + ")").css('background-color', '#ECEDCE');
+                    }
                 }
+                oldList = newList;
             }
-            oldList = newList;
         }
     });
 }
