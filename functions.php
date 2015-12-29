@@ -158,7 +158,7 @@ function addMV($Text)
                 "INSERT INTO MinnsDu (Text, SkrivenAv)
                 VALUES (:Text, :SkrivenAv)"
             );
-
+            addStat($db);
             $stmt->bindParam(':Text', $Text);
             $stmt->bindParam(':SkrivenAv', $ip);
             $Rowtext = $Text;
@@ -183,6 +183,30 @@ function addMV($Text)
         return "... inte förstod?";
     }
 }
+
+function addStat($db) {
+    $date = date("Ymd");
+    
+    $stmt = $db->prepare("SELECT * FROM DailyStat WHERE TheDate = :date");
+    $stmt->bindParam(':date', ($date));
+    $stmt->execute();
+    $dailyStat = 1;
+    $dailyStatFetch = $stmt->fetch();
+    if (!empty($dailyStatFetch)) {
+        $dailyStat = $dailyStatFetch['Amount'] + 1;
+    }
+
+    $stmt2 = $db->prepare(
+        "INSERT OR REPLACE INTO DailyStat (TheDate, Amount) VALUES
+        (:date, :amount)"
+    );
+    $stmt2->bindParam(':date', ($date));
+    $stmt2->bindParam(':amount', ($dailyStat));
+    $stmt2->execute();
+
+}
+
+
 
 function removeMV($password, $ID)
 {
