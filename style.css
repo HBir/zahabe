@@ -17,6 +17,7 @@ body {
 	font-size: 20px;
     margin-top: 0px;
     margin-bottom: 0px;
+    margin: 0px;
 }
 
 #wrapper {
@@ -26,16 +27,18 @@ body {
     width:1008px;
     height:100%;
     /*border-radius:10px;*/
-    box-shadow:0 -2px 2px rgba(34,34,34,0.6);
+    /*box-shadow:0 -2px 2px rgba(34,34,34,0.6);*/
 	display: inline-block;
 	position: relative;
 }
 
 li {
-margin:10px;
-/*margin-top: 5px;
-margin-bottom: 5px;*/
-font-size: 20px;
+    margin:10px;
+    /*margin-top: 5px;
+    margin-bottom: 5px;*/
+    font-size: 20px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 .button {
 	width:80px;
@@ -144,22 +147,26 @@ a li span:hover {
 	opacity: 0.7;
 }
 
-.IPRemoveIcon {
+.IPRemoveIcon, .IPEditIcon {
 	position: absolute;
 	right: 20px;
 	
 	width: 10px;
 	height: 10px;
 }
-
-.IPRemoveIcon img {
+.IPEditIcon {
+    right: 45px;
+}
+.IPRemoveIcon img, .IPEditIcon img {
 
 	width: 25px;
-	opacity: 0.1;
+	opacity: 0.4;
 }
-.IPRemoveIcon img:hover{
-	opacity: 0.5;
+.IPRemoveIcon img:hover, .IPEditIcon:hover{
+	opacity: 0.8;
 }
+
+
 
 #errorspace {
     font-weight: bold;
@@ -175,7 +182,7 @@ a li span:hover {
 	width: 900px;
 	height: 800px;
 }
-
+/********************************************************************/
 @media screen and (max-width:1000px) {
 body {
 width: 98%;
@@ -200,12 +207,12 @@ width:70%;
 #dagens {
 	max-width: 90%;
 }
-#h1 {
+h1 {
     font-size: 1.5em;
     color: blue;
 }
 }
-
+/************************************************************************/
 #storytext > p > img {
 	margin-left: auto;
     margin-right: auto;
@@ -248,6 +255,7 @@ hr {
 
 }
 #sidebarRight,#sidebarLeft {
+    display: none;
     /*background-color: white;*/
     width: 410px;
     height: 500px;
@@ -265,10 +273,51 @@ hr {
     background: gray;
     margin:0 auto;
 }
-/*
+
 .MV {
     border-radius: 10px;
-    background-color: #f1f1f1;
-    border: 1px solid #eee;
     padding: 5px;
-}*/
+}
+
+#header {
+    background: white;
+    margin-top: 0px;
+    width: 950px;
+    height: 100px;
+}
+
+#headerh1 {
+    margin: 0px;
+    margin-top: 10px;
+}
+
+.editRuta {
+    vertical-align: middle;
+    font: 20px "Open Sans","sans-serif";
+    width: 756px;
+    max-width: 756px;
+    position: relative;
+    left: -70px;
+}
+
+.editPos {
+    width: 60px;
+    left: 20px;
+    font:20px "Open Sans","sans-serif";
+    position: relative;
+    left: -72px;
+}
+
+#admin {
+    float: right;
+}
+#adminsubmit {
+    float: right;
+    width: 30px;
+    margin-right: 2px;
+}
+#adminpassword {
+    width: 150px;
+    font: 20px "Open Sans","sans-serif";
+    float: left;
+}

@@ -158,7 +158,7 @@ function addMV($Text)
                 "INSERT INTO MinnsDu (Text, SkrivenAv)
                 VALUES (:Text, :SkrivenAv)"
             );
-            addStat($db);
+            addStat(1, $db);
             $stmt->bindParam(':Text', $Text);
             $stmt->bindParam(':SkrivenAv', $ip);
             $Rowtext = $Text;
@@ -184,7 +184,7 @@ function addMV($Text)
     }
 }
 
-function addStat($db) {
+function addStat($amount, $db) {
     $date = date("Ymd");
     
     $stmt = $db->prepare("SELECT * FROM DailyStat WHERE TheDate = :date");
@@ -193,7 +193,7 @@ function addStat($db) {
     $dailyStat = 1;
     $dailyStatFetch = $stmt->fetch();
     if (!empty($dailyStatFetch)) {
-        $dailyStat = $dailyStatFetch['Amount'] + 1;
+        $dailyStat = $dailyStatFetch['Amount'] + intval($amount);
     }
 
     $stmt2 = $db->prepare(
@@ -206,15 +206,33 @@ function addStat($db) {
 
 }
 
-
+function removeMV2($ID) {
+    if ($ID == '1') {
+        return '...försökte rubba det fundament på vilket allt vilade?';
+    }
+    if (empty($ID)) {
+        return '...inte förstod?';
+    }
+    try{
+        $db = new PDO('sqlite:zahabe.db');
+        
+        $stmt = $db->prepare('delete from MinnsDu where id = :id');
+        $stmt->bindParam(':id', $ID);
+        $stmt->execute();
+        addStat(-1, $db);
+        $db = NULL;
+    } catch(PDOException $e) {
+        return 'Exception : '.$e->getMessage();
+    }
+}
 
 function removeMV($password, $ID)
 {
     /*Tar bort ett MV*/
-    if ($ID == '1') {
-        return '...försökte rubba det fundament på vilket allt vilade?';
-    }
     if ($password === "iklabbe") {
+        if ($ID == '1') {
+            return '...försökte rubba det fundament på vilket allt vilade?';
+        }
         if (empty($ID)) {
             return '...inte förstod?';
         }
@@ -229,11 +247,12 @@ function removeMV($password, $ID)
                         as t
                         )');
             $i = 0;    
+            addStat(-1, $db);
             foreach ($result as $row) {
                 return "..tog bort raden: ".$row['Text']."<br>";
                 $i = 1;
             }
-                
+            
             if ($i == 0) {
                 return "Rad nummer ".$ID." existerar ej";
             }

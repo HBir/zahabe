@@ -2,6 +2,7 @@
 var newMvs = 0;
 var oldList = 0;
 var newList = 0;
+var timer = null;
 
 function refreshPage(type) {
     /*Kollar om några nya inlägg har lagts till och uppdaterar sidan asynkront ifall så är fallet*/
@@ -18,13 +19,122 @@ function refreshPage(type) {
                     document.title = "(" + newMvs + ") Minns vi den gången Zahabe";
 
                     for (i = 1; i <= newMvs; i++) {
-                        $("#MVs li:nth-child(" + i + ")").css('background-color', '#ECEDCE');
+                        $("#MVs li:nth-child(" + i + ")").css('background-color', '#DCDCDC');
+                        $("#MVs li:nth-child(" + i + ")").css('border-radius', '10px');
+                        $("#MVs li:nth-child(" + i + ")").css('padding', '5px');
                     }
                 }
                 oldList = newList;
             }
         }
     });
+}
+
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+
+function refreshEditPage() {
+    
+    clearInterval(timer);
+
+    timer = null;
+     $(".MVEdit").parent().hide().slideDown();
+     $.get("ajaxEditUI.php", function (data) {
+
+         $("#MVs").html(data);
+         editButtonFunctionality(data);
+
+     });
+    
+}
+
+function editButtonFunctionality(data) {
+$(".MVCross").click(function (e2) {
+             e2.preventDefault();
+             console.log($(this).attr("destinationurl"));
+             removeMV($(this).attr("destinationurl"));
+         });
+         $(".MVEdit").click(function (e) {
+             e.preventDefault();
+
+
+             var MV = $(this).parent().next().next();
+             var nr = $(MV).val();
+             var id = $(this).attr('destinationurl');
+             console.log(id);
+             var text = $(MV).text();
+             $(MV).css("list-style-type", "none");
+             $(MV).hide().html('<form class="EditForm" action="" method="post" accept-charset="utf-8" autocomplete="off">' +
+                        '<input name="id" type="hidden"  value="' + id + '">' +
+
+                        '<input type="integer" name="newPos" class="editPos" placeholder="#" value="' + nr + '">' +
+                        '<textarea name="Text" class="editRuta">' + text + '</textarea></form>').slideDown();
+
+             //$(this).append( "<a class='confirmEdit'><img src='assets/check.png' alt='edit'></a>" )
+             $(this).html("<img src='assets/check.png' alt='edit'>");
+             $(this).addClass('confirmEdit').removeClass('MVEdit');
+             $(this).unbind("click");
+             $(this).click(function (event) {
+                 event.preventDefault();
+                 var url = "ajaxEditMV.php";
+                 $.ajax({
+                     type: "POST",
+                     url: url,
+                     data: $(MV).find("form").serialize(),
+                     success: function (data) {
+                         showMessage(data);
+                         refreshEditPage();
+                     },
+                     /*Visar ett felmeddelande beroende på vilken HTTP-statuskod skickas tillbaka*/
+                     error: function (XMLHttpRequest, textStatus, errorThrown) {
+                         switch (errorThrown) {
+                             case "Not Acceptable":
+                                 showMessage("...inte förstod");
+                                 break;
+                             case "Conflict":
+                                 showMessage("...försökte duplicera sin död");
+                                 break;
+                             case "Forbidden":
+                                 showMessage("...hittade det förbjudna");
+                                 break;
+                             case "Unauthorized":
+                                 showMessage("...gjorde bort sig totalt");
+                                 break;
+                             default:
+                                 showMessage("...fick " + errorThrown);
+                         }
+                     }
+                 });
+             });
+         });
+
+
+}
+
+function removeMV(id) {
+    var r = confirm("Säker på att du vill ta bort "+id+"?");
+    if (r == true) {
+        $.ajax({
+            url: "ajaxRemove.php",
+            type: "POST",
+            data: { id: id },
+            success: function (data) {
+                console.log("Removed:" + data);
+                refreshEditPage();
+            }
+        });
+    } else {
+        return;
+    }
+}
+
+function showMessage(message) {
+    if (isBlank($('#errorspace').text())) {
+        $('#errorspace').hide().html(message).slideDown();
+    } else {
+        $('#errorspace').hide().html(message).fadeIn();
+    }
 }
 
 $(window).focus(function() {
@@ -56,36 +166,51 @@ $(document).ready(function() {
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 switch (errorThrown) {
                     case "Not Acceptable":
-                        $('#errorspace').html("...inte förstod");
-                        break;
+                         showMessage("...inte förstod");
+                         break;
                     case "Conflict":
-                        $('#errorspace').html("...försökte duplicera sin död");
-                        break;
+                         showMessage("...försökte duplicera sin död");
+                         break;
                     case "Forbidden":
-                        $('#errorspace').html("...hittade det förbjudna");
-                        break;
+                         showMessage("...hittade det förbjudna");
+                         break;
                     case "Unauthorized":
-                        $('#errorspace').html("...gjorde bort sig totalt");
-                        break;
+                         showMessage("...gjorde bort sig totalt");
+                         break;
                     default:
-                        $('#errorspace').html("...fick " + errorThrown);
-                }
+                         showMessage("...fick " + errorThrown);
+                    }
             }
         });
         e.preventDefault();
     });
 });
 
+
+
+$(function () {
+    $("#editActive").click(function (e) {
+        e.preventDefault();
+        $(this).unbind("click");
+        $(this).attr("href", "zahabe.php");
+        refreshEditPage();
+    });
+});
+
+
+
+
 $(window).load(function () {
     /*Init*/
     oldList = document.getElementById("MVs").getElementsByTagName("li").length;
     var cookiedList = getCookie("MVAmount");
-
-    for (i = 1; i <= oldList - cookiedList; i++) {
-        $("#MVs li:nth-child(" + i + ")").css('background-color', '#f1f1f1');
+    if (cookiedList) {
+        for (i = 1; i <= oldList - cookiedList; i++) {
+            $("#MVs li:nth-child(" + i + ")").css('background-color', '#DCDCDC');
+        }
     }
 
-    setInterval("refreshPage('')", 5000);
+    timer = setInterval("refreshPage('')", 5000);
 });
 
 
@@ -106,3 +231,20 @@ function getCookie(cname) {
     }
     return "";
 }
+
+$(document).ready(function () {
+    /*Admin*/
+    $("#admin").submit(function (e) {
+        e.preventDefault();
+        url = "ajaxEditUI.php";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#admin").serialize(),
+            success: function (data) {
+                $("#MVs").html(data);
+                editButtonFunctionality(data);
+            }
+        });
+    });
+});

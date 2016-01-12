@@ -40,7 +40,7 @@
                 } else {
                     echo '<form action="editAction.php?id='.$MVID.'" method="post" accept-charset="utf-8" autocomplete="off">
                         <div id="formbox">
-                            <input type="integer" name="newPos" id="newPos" placeholder="#" value="'.$ID.'">
+                            <input type="integer" name="newPos" id="editPos" placeholder="#" value="'.$ID.'">
                             <input type="text" name="Text" id="editruta" placeholder="Ny" value="'.$row2["Text"].'" required>
                                 <textarea name="story" id="storyedit">'.$row2["Story"].'</textarea><br>
                             <input type="submit" class="button" value="Ändra">

@@ -47,15 +47,15 @@
         
         <div id="wrapper">
             <h1><a href="zahabe.php">Minns vi den gången Zahabe...</a></h1>
-            <div id="errorspace"><!--Error messages appear here-->
             
+            <div id="errorspace"><!--Error messages appear here-->
             </div>
             <div class="lank edit">
                 <a href="allstories.php" title="Attatchments"><img src="assets/read.png" alt="Attatchments"></a>
                 
             </div>
             <div class="lank edit rightmenu">
-                <a href="remove.php" title="Edit" id="editActive"><img src="assets/edit.png" alt="edit"></a>
+                <a href="remove.php" title="Edit"><img src="assets/edit.png" alt="edit"></a>
             </div>
             <form id="MVform" action="add.php" method="post" accept-charset="utf-8" autocomplete="off">
                 <div id="formbox">
@@ -64,6 +64,11 @@
                 </div>
             </form>
             
+            <form id="EditForm" action="" method="post" accept-charset="utf-8" autocomplete="off">
+                <input type="integer" name="newPos" id="newPos" placeholder="#" value="">
+                <input type="text" name="text" id="editRuta" value="">
+            </form>
+
             <div id="dagens">
                 <b>Dagens Zahabe:</b>
                 <ol>
@@ -120,11 +125,6 @@ try{
                 </ol>
 
             </div>
-            <form id="admin">
-                <input id="adminpassword" type="password" name="password" required>
-                <input id="adminsubmit"type ="submit" formaction="ajaxEditUI.php" class="button" value=">">
-            </form>
         </div>
-        
     </body>
 </html>
