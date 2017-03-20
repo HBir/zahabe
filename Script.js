@@ -4,6 +4,8 @@ var oldList = 0;
 var newList = 0;
 var timer = null;
 
+
+
 function refreshPage(type) {
     /*Kollar om några nya inlägg har lagts till och uppdaterar sidan asynkront ifall så är fallet*/
     $.get("ajaxMV.php", function (data) {
@@ -50,66 +52,65 @@ function refreshEditPage() {
 }
 
 function editButtonFunctionality(data) {
-$(".MVCross").click(function (e2) {
-             e2.preventDefault();
-             console.log($(this).attr("destinationurl"));
-             removeMV($(this).attr("destinationurl"));
-         });
-         $(".MVEdit").click(function (e) {
-             e.preventDefault();
+    /*Knapp för att ta bort MV*/
+    $(".MVCross").click(function(e2) {
+        e2.preventDefault();
+        console.log($(this).attr("destinationurl"));
+        removeMV($(this).attr("destinationurl"));
+    });
+    /*Knapp för att ändra MV*/
+    $(".MVEdit").click(function(e) {
+        e.preventDefault();
 
 
-             var MV = $(this).parent().next().next();
-             var nr = $(MV).val();
-             var id = $(this).attr('destinationurl');
-             console.log(id);
-             var text = $(MV).text();
-             $(MV).css("list-style-type", "none");
-             $(MV).hide().html('<form class="EditForm" action="" method="post" accept-charset="utf-8" autocomplete="off">' +
-                        '<input name="id" type="hidden"  value="' + id + '">' +
+        var MV = $(this).parent().next().next();
+        var nr = $(MV).val();
+        var id = $(this).attr('destinationurl');
+        console.log(id);
+        var text = $(MV).text();
+        $(MV).css("list-style-type", "none");
+        $(MV).hide().html('<form class="EditForm" action="" method="post" accept-charset="utf-8" autocomplete="off">' +
+            '<input name="id" type="hidden"  value="' + id + '">' +
+            '<input type="integer" name="newPos" class="editPos" placeholder="#" value="' + nr + '">' +
+            '<textarea name="Text" class="editRuta">' + text + '</textarea></form>').slideDown();
 
-                        '<input type="integer" name="newPos" class="editPos" placeholder="#" value="' + nr + '">' +
-                        '<textarea name="Text" class="editRuta">' + text + '</textarea></form>').slideDown();
-
-             //$(this).append( "<a class='confirmEdit'><img src='assets/check.png' alt='edit'></a>" )
-             $(this).html("<img src='assets/check.png' alt='edit'>");
-             $(this).addClass('confirmEdit').removeClass('MVEdit');
-             $(this).unbind("click");
-             $(this).click(function (event) {
-                 event.preventDefault();
-                 var url = "ajaxEditMV.php";
-                 $.ajax({
-                     type: "POST",
-                     url: url,
-                     data: $(MV).find("form").serialize(),
-                     success: function (data) {
-                         showMessage(data);
-                         refreshEditPage();
-                     },
-                     /*Visar ett felmeddelande beroende på vilken HTTP-statuskod skickas tillbaka*/
-                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                         switch (errorThrown) {
-                             case "Not Acceptable":
-                                 showMessage("...inte förstod");
-                                 break;
-                             case "Conflict":
-                                 showMessage("...försökte duplicera sin död");
-                                 break;
-                             case "Forbidden":
-                                 showMessage("...hittade det förbjudna");
-                                 break;
-                             case "Unauthorized":
-                                 showMessage("...gjorde bort sig totalt");
-                                 break;
-                             default:
-                                 showMessage("...fick " + errorThrown);
-                         }
-                     }
-                 });
-             });
-         });
-
-
+        $(this).html("<img src='assets/check.png' alt='edit'>");
+        $(this).addClass('confirmEdit').removeClass('MVEdit');
+        $(this).unbind("click");
+        /*Knapp för att confirma ändring av MV*/
+        $(this).click(function(event) {
+            event.preventDefault();
+            var url = "ajaxEditMV.php";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $(MV).find("form").serialize(),
+                success: function(data) {
+                    showMessage(data);
+                    refreshEditPage();
+                },
+                /*Visar ett felmeddelande beroende på vilken HTTP-statuskod skickas tillbaka*/
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    switch (errorThrown) {
+                        case "Not Acceptable":
+                            showMessage("...inte förstod");
+                            break;
+                        case "Conflict":
+                            showMessage("...försökte duplicera sin död");
+                            break;
+                        case "Forbidden":
+                            showMessage("...hittade det förbjudna");
+                            break;
+                        case "Unauthorized":
+                            showMessage("...gjorde bort sig totalt");
+                            break;
+                        default:
+                            showMessage("...fick " + errorThrown);
+                    }
+                }
+            });
+        });
+    });
 }
 
 function removeMV(id) {
@@ -247,4 +248,38 @@ $(document).ready(function () {
             }
         });
     });
+    var alertPos = 1;
+
+    function moveAlert() {
+        switch (alertPos) {
+            case 0:
+                $(".gayalert").css("top", "0px");
+                alertPos = 1;
+                break; 
+            case 1:
+                $(".gayalert").css("top", "300px");
+                alertPos = 2;
+                console.log("ehhhh");
+                break;
+            case 2:
+                $(".gayalert").css("top", "600px");
+                alertPos = 3;
+                break;
+            case 3:
+                $(".gayalert").css("top", "300px");
+                alertPos = 0;
+                break; 
+            default:
+                console.log("what");
+                break;
+        }
+    }
+
+
+    setInterval(moveAlert, 440);
+
+    moveAlert();
+
+
+
 });

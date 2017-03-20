@@ -255,7 +255,6 @@ hr {
 
 }
 #sidebarRight,#sidebarLeft {
-    display: none;
     /*background-color: white;*/
     width: 410px;
     height: 500px;
@@ -266,6 +265,13 @@ hr {
 }
 #sidebarLeft>img,#sidebarRight>img {
     width: 100%;
+}
+#hidden-video {
+    display: none;
+}
+.gayalert {
+    position: relative;
+    
 }
 #bigwrapper {
     max-width: 100%;

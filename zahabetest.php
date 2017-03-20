@@ -97,7 +97,7 @@ try{
                             {
                               if (isset($row['Story'])) {
                                 print "<div class='storyicon'><a href='story.php?id=".$row['ID']."'><img src='assets/read.png' alt='read full'></a></div>";
-                                print "<a href='story.php?id=".$row['ID']."'><li value=".$row['cnt']." class='MV'><span>".$row['Text']."</span></li></a>";
+                                print "<a href='story.php?id=".$row['ID']."'><li class='MV'><span>".$row['Text']."</span></li></a>";
                               } else {
                                 /*TBD - ta bort egna MVs utan lösen
                                 
@@ -120,11 +120,6 @@ try{
                 </ol>
 
             </div>
-            <form id="admin">
-                <input id="adminpassword" type="password" name="password" required>
-                <input id="adminsubmit"type ="submit" formaction="ajaxEditUI.php" class="button" value=">">
-            </form>
         </div>
-        
     </body>
 </html>
